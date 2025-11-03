@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blue vs Red — The Color War</title>
+  <meta name="description" content="Pick your side. Every buy is a bullet. Blue vs Red — 48h battle." />
+  <style>
+    :root{
+      --bg: #0b0c10;
+      --card: #121318;
+      --muted: #9aa3b2;
+      --text: #e8ecf1;
+      --blue: #2563eb;
+      --red: #ef4444;
+      --ring: rgba(255,255,255,.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background: radial-gradient(70% 60% at 50% 0%, #10131a 0%, var(--bg) 70%);
+      color:var(--text); font:500 16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,Arial,sans-serif;
+      display:flex; flex-direction:column; align-items:center; gap:24px;
+    }
+    header{width:100%; max-width:1040px; padding:18px 20px; display:flex; align-items:center; justify-content:space-between}
+    .brand{display:flex; align-items:center; gap:12px; letter-spacing:.4px}
+    .brand .dot{width:12px; height:12px; border-radius:999px; background:conic-gradient(var(--blue) 50%, var(--red) 0)}
+    .brand h1{margin:0; font-size:18px; font-weight:700}
+    nav{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{appearance:none; border:1px solid #202636; background:#141824; color:var(--text); padding:10px 14px; border-radius:12px; cursor:pointer; transition:.2s transform,.2s background,.2s border}
+    .btn:hover{transform:translateY(-1px); border-color:#2a3347; background:#161b28}
+    .btn.buy-blue{border-color: rgba(37,99,235,.4); background:rgba(37,99,235,.08)}
+    .btn.buy-red{border-color: rgba(239,68,68,.4); background:rgba(239,68,68,.08)}
+    main{width:100%; max-width:1040px; padding:0 20px 32px; display:grid; grid-template-columns:1.1fr .9fr; gap:24px}
+    @media (max-width: 900px){ main{grid-template-columns:1fr; } }
+    .card{background:linear-gradient(180deg, #131723 0%, #0f1420 100%); border:1px solid #1b2030; border-radius:20px; padding:20px; box-shadow:0 6px 30px rgba(0,0,0,.35)}
+    .title{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px}
+    .title h2{margin:0; font-size:14px; letter-spacing:.5px; color:var(--muted); font-weight:600; text-transform:uppercase}
+    .arena{display:grid; place-items:center; padding:12px 0 6px}
+    .circle{
+      width:min(56vw, 520px); height:min(56vw, 520px); border-radius:999px;
+      background:conic-gradient(var(--blue) var(--deg, 180deg), var(--red) 0);
+      outline:1px solid #1c2435; box-shadow: inset 0 0 0 10px rgba(255,255,255,.02), 0 0 0 12px var(--ring), 0 30px 90px rgba(0,0,0,.45);
+      position:relative;
+    }
+    .circle::after{
+      content: attr(data-label);
+      position:absolute; inset:auto 0 42% 0; margin:auto; text-align:center; font-weight:800; font-size:clamp(22px,4vw,44px);
+      text-shadow:0 2px 10px rgba(0,0,0,.45);
+    }
+    .legend{display:flex; gap:14px; justify-content:center; margin-top:16px}
+    .pill{display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:#121624; border:1px solid #1b2130; color:#cdd6e5; font-size:13px}
+    .swatch{width:10px; height:10px; border-radius:999px}
+    .stats{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px}
+    .stat{padding:14px; background:#0f1420; border:1px solid #1b2030; border-radius:14px}
+    .stat .k{font-size:22px; font-weight:800}
+    .muted{color:var(--muted)}
+    .bar{height:12px; background:#0e1421; border:1px solid #1b2130; border-radius:999px; overflow:hidden}
+    .bar>i{display:block; height:100%; width:0}
+    .controls{display:grid; gap:10px}
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    input[type="number"]{width:120px; background:#0d1220; color:var(--text); border:1px solid #242a3a; border-radius:10px; padding:10px}
+    .mini{font-size:12px; color:var(--muted)}
+    .inline-links{display:flex; gap:8px; flex-wrap:wrap}
+    a.link{color:#c9d7ff; text-decoration:none}
+    a.link:hover{text-decoration:underline}
+    footer{opacity:.8; font-size:12px; padding:0 20px 30px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>Blue vs Red — The Color War</h1>
+    </div>
+    <nav>
+      <a id="buyBlue" class="btn buy-blue" target="_blank" rel="noopener">Buy $BLUE</a>
+      <a id="buyRed"  class="btn buy-red"  target="_blank" rel="noopener">Buy $RED</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card">
+      <div class="title"><h2>Arena</h2></div>
+      <div class="arena">
+        <div id="circle" class="circle" data-label="50% 🔵 / 50% 🔴"></div>
+        <div class="legend">
+          <span class="pill"><i class="swatch" style="background:var(--blue)"></i> Blue</span>
+          <span class="pill"><i class="swatch" style="background:var(--red)"></i> Red</span>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="muted">Holders</div>
+          <div class="k" id="holdersBlue">0</div>
+          <div class="bar" aria-label="Blue holders share"><i id="barBlue"></i></div>
+        </div>
+        <div class="stat">
+          <div class="muted">Holders</div>
+          <div class="k" id="holdersRed" style="text-align:right">0</div>
+          <div class="bar" aria-label="Red holders share"><i id="barRed" style="margin-left:auto"></i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="title"><h2>Controls</h2></div>
+      <div class="controls">
+        <div class="row">
+          <label>🔵 Blue holders
+            <input id="inputBlue" type="number" min="0" step="1" value="0" />
+          </label>
+          <label>🔴 Red holders
+            <input id="inputRed" type="number" min="0" step="1" value="0" />
+          </label>
+          <button class="btn" id="btnUpdate">Update</button>
+        </div>
+        <div class="row mini">
+          Astuce : ajoutez à l’URL <code>?blue=42&red=37</code>. Le site lit ces valeurs automatiquement.
+        </div>
+        <div class="row">
+          <button class="btn buy-blue" id="plusBlue">+1 Blue</button>
+          <button class="btn buy-red" id="plusRed">+1 Red</button>
+          <button class="btn" id="reset">Reset</button>
+        </div>
+        <hr style="border:none; border-top:1px solid #1b2030; margin:6px 0 4px"/>
+        <div class="row">
+          <div>
+            <div class="mini">Liens d’achat</div>
+            <div class="inline-links mini">
+              <a id="linkBlue" class="link" target="_blank" rel="noopener">Pump.fun ∙ $BLUE</a>
+              <a id="linkRed"  class="link" target="_blank" rel="noopener">Pump.fun ∙ $RED</a>
+            </div>
+          </div>
+        </div>
+        <div class="row mini">
+          Conseil : épinglez le tweet principal « Every buy is a bullet » et mettez ce site en bio.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div style="max-width:1040px; margin:0 auto;">
+      <span class="mini">© The Color War · 48h battle · Be decent. No promises. No guarantees.</span>
+    </div>
+  </footer>
+
+  <script>
+    const PUMP_BLUE = "https://pump.fun/coin/4b2df12iFgWWt8vXEvPab3oaNbZwU9im1R2nVnLgpump";
+    const PUMP_RED  = "https://pump.fun/coin/A6j8grZPuyJXB6TNVzXgYAWx2eAt5NvpqAUpQWpTpump";
+
+    document.getElementById('buyBlue').href = PUMP_BLUE;
+    document.getElementById('buyRed').href  = PUMP_RED;
+    document.getElementById('linkBlue').href = PUMP_BLUE;
+    document.getElementById('linkRed').href  = PUMP_RED;
+
+    let blue = 0, red = 0;
+    const $ = (id)=>document.getElementById(id);
+
+    function readQuery() {
+      const p = new URLSearchParams(location.search);
+      const b = parseInt(p.get('blue')); const r = parseInt(p.get('red'));
+      if(!Number.isNaN(b)) blue = Math.max(0, b);
+      if(!Number.isNaN(r)) red  = Math.max(0, r);
+    }
+    function saveLocal(){ try{ localStorage.setItem('bvrs', JSON.stringify({blue,red})); }catch(_){ } }
+    function readLocal(){ try{ const s = localStorage.getItem('bvrs'); if(s){ const o = JSON.parse(s); if(typeof o.blue==='number') blue=o.blue; if(typeof o.red==='number') red=o.red; }}catch(_){ } }
+    function fmt(n){ return Intl.NumberFormat('en', {maximumFractionDigits:0}).format(n); }
+    function render(){
+      const total = Math.max(0, blue + red);
+      const blueShare = total ? (blue/total) : .5;
+      const deg = Math.round(360*blueShare);
+      const pctBlue = Math.round(100*blueShare);
+      const pctRed  = 100 - pctBlue;
+      $('circle').style.setProperty('--deg', deg + 'deg');
+      $('circle').setAttribute('data-label', `${pctBlue}% 🔵 / ${pctRed}% 🔴`);
+      $('holdersBlue').textContent = fmt(blue);
+      $('holdersRed').textContent  = fmt(red);
+      $('barBlue').style.width = (pctBlue + '%');
+      $('barBlue').style.background = 'linear-gradient(90deg, var(--blue), rgba(37,99,235,.6))';
+      $('barRed').style.width  = (pctRed + '%');
+      $('barRed').style.background  = 'linear-gradient(90deg, rgba(239,68,68,.6), var(--red))';
+      $('inputBlue').value = blue; $('inputRed').value = red;
+    }
+    function updateFromInputs(){
+      const b = parseInt($('inputBlue').value); const r = parseInt($('inputRed').value);
+      if(!Number.isNaN(b)) blue = Math.max(0,b);
+      if(!Number.isNaN(r)) red  = Math.max(0,r);
+      saveLocal(); render();
+      const u = new URL(location.href); u.searchParams.set('blue', blue); u.searchParams.set('red', red); history.replaceState(null,'',u);
+    }
+    readLocal(); readQuery(); render();
+    $('btnUpdate').addEventListener('click', updateFromInputs);
+    $('plusBlue').addEventListener('click', ()=>{ blue++; saveLocal(); render(); });
+    $('plusRed').addEventListener('click',  ()=>{ red++;  saveLocal(); render(); });
+    $('reset').addEventListener('click', ()=>{ blue=0; red=0; saveLocal(); render(); });
+  </script>
+</body>
+</html>
